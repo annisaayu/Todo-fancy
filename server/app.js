@@ -11,9 +11,9 @@ require('dotenv').config()
 const usermongo = process.env.USERMONGO
 const passmongo = process.env.PASSMONGO
 
-mongoose.connect('mongodb://localhost/todo-fancy');
+// mongoose.connect('mongodb://localhost/todo-fancy');
 
-// mongoose.connect(`mongodb://${usermongo}:${passmongo}@ds243055.mlab.com:43055/todo-fancy`);
+mongoose.connect(`mongodb://${usermongo}:${passmongo}@ds053874.mlab.com:53874/todo-fancy`);
 
 app.use(cors())
 app.use(express.json())
