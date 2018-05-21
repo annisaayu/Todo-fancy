@@ -1,26 +1,51 @@
 <template>
-  <div>
-    <div id="myDIV" class="header">
-      <h2 style="margin:5px">Hai! Add Your Daily To Do List</h2>
-      <button type="button" class="btn btn-danger btn-md btn-logout"
-      v-on:click="logout">Logout</button>
-    </div>
-    <section>
-      <div class="form-addList">
-        <input type="text" id="input-list" v-model="newtodo" placeholder="type here to add new to-do here..">
-        <span @click="addTodo()" class="add-btn">Add</span>
+  <div class="container">
+    <a class="waves-effect red lighten-2 btn" v-on:click="logout">Logout</a>
+    <div class="row box">
+      <div class="col s12 ">
+        <div id="myDIV" class="header red lighten-5">
+          <h4 style="margin:5px">Hai! Add Your Daily To Do List</h4>
+        </div>
+        <section>
+          <div class="form-addList">
+            <div class="input-field col s12">
+              <input type="text" id="input-list" v-model="newtodo" v-on:keyup.enter="addTodo" class="autocomplete">
+              <label for="autocomplete-input" v-on:keyup.enter="addTodo" >type here to add new to-do here..</label>
+            </div>
+          </div>
+          <ul id="myUL">
+            <li v-for="todo in todolist" :key="todo._id">
+              <div class="row">
+                <div class="col s10">
+                  <span @click="editIsComplete(todo, true)">
+                     {{ todo.task }} 
+                  </span>
+                </div>
+                <div class="col s2">
+                  <i class="material-icons edit" @click="editTask(todo)" >edit</i>
+                  <span class="close" @click="deleteTask(todo)" >
+                    <i class="material-icons">close</i>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li v-for="todo in completelist" :key="todo._id" class="checked red accent-1">
+              <div class="row">
+                <div class="col s10" >
+                  <span @click="editIsComplete(todo, false)"> {{ todo.task }} </span>
+                </div>
+                <div class="col s2">
+                  <i class="material-icons edit" @click="editTask(todo)">edit</i>
+                  <span class="close" @click="deleteTask(todo)" >
+                    <i class="material-icons">close</i>
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
       </div>
-      <ul id="myUL">
-        <li v-for="todo in todolist" :key="todo._id">
-          <span @click="editIsComplete(todo, true)"> {{ todo.task }} </span>
-          <span class="close" @click="deleteTask(todo)" >x</span>
-        </li>
-        <li v-for="todo in completelist" :key="todo._id" class="checked">
-          <span @click="editIsComplete(todo, false)"> {{ todo.task }} </span>
-          <span class="close" @click="deleteTask(todo)" >x</span>
-        </li>
-      </ul>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -29,8 +54,8 @@ import axios from 'axios'
 import { log } from 'util';
 
 export default {
-    name: 'Login',
-  data() {
+    name: 'Todo',
+  data () {
     return {
       newtodo: '',
       todolist: [],
@@ -38,7 +63,7 @@ export default {
     }
   },
   methods: {
-    getTodo(){
+    getTodo () {
       const arrTodo = []
       const arrComplete = []
       axios.get('http://localhost:3000/todo/', {
@@ -62,16 +87,14 @@ export default {
         .catch((err) => {
           console.log('ini err', err)
         })
-        console.log(this.todolist)
     },
-    addTodo() {
+    addTodo () {
       self = this
-
-      if(this.newtodo === '') {
-        alert("You must write something!")
+      if (this.newtodo === '') {
+        alert('You must write something!')
       } else {
         axios.post('http://localhost:3000/todo/', {
-          task: this.newtodo,
+          task: this.newtodo
         }, {
           headers: {
             token: localStorage.getItem('token')
@@ -85,12 +108,11 @@ export default {
           })
       }
     },
-    editIsComplete(todo, isComplete) {
+    editIsComplete (todo, isComplete) {
       let self = this
-
       axios.put('http://localhost:3000/todo/', {
         id: todo._id,
-        isComplete,
+        isComplete
       }, {
         headers: {
           token: localStorage.getItem('token')
@@ -103,7 +125,7 @@ export default {
           console.log('ini err', err)
         })
     },
-    editTask(todo) {
+    editTask (todo) {
       let self = this
       console.log('masuk edit task')
       console.log('todo', todo)
@@ -115,7 +137,7 @@ export default {
         }, {
           headers: {
             token: localStorage.getItem('token')
-          },
+          }
         })
           .then(() => {
             self.getTodo()
@@ -125,7 +147,7 @@ export default {
           })
       }
     },
-    deleteTask(todo) {
+    deleteTask (todo) {
       let self = this
       axios.delete(`http://localhost:3000/todo/${todo._id}`, {
         headers: {
@@ -139,12 +161,15 @@ export default {
           console.log('ini err', err)
         })
     },
-    logout() {
+    logout () {
       localStorage.removeItem('token')
       this.$router.push('/login')
     }
   },
-  async created() {
+  async created () {
+    if (!localStorage.hasOwnProperty('token')) {
+      window.location.replace('/')
+    }
     this.getTodo()
   },
   mounted: () => {
@@ -154,21 +179,16 @@ export default {
 </script>
 
 <style scoped>
-html,body{
-  font-family: 'Muli', sans-serif;
-}
-
 /* Include the padding and border in an element's total width and height */
-* {
-  margin: 0;
-  padding: 0;
+.col {
   box-sizing: border-box;
 }
+.row {
+  margin-bottom: 0;
+}
+.box { margin-top: 30px;}
 section{
-  width: 80%;
-  margin: 50px auto;
   border: 1px solid #fff;
-  border-radius: 5px;
   background: white;
   box-shadow: 1px 2px 6px #efdcbc;
 }
@@ -221,15 +241,8 @@ ul li.checked::before {
 }
 
 /* Style the close button */
-.close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 12px 16px 12px 16px;
-}
 
-.close:hover {
-  background-color: #44bba4;
+.close:hover, .edit:hover {
   color: white;
 }
 
@@ -288,5 +301,4 @@ input {
   background-color: #fbc2b5;
   border-top-right-radius: 5px;
 }
-
 </style>
