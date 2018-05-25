@@ -10,6 +10,10 @@
 </template>
 
 <style lang="scss">
+body {
+  background:url("./assets/pattern.png");
+  background-repeat: repeat;
+}
 html {
   font-family: 'Quicksand', sans-serif;
 }
@@ -37,16 +41,16 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Tillana', cursive;
   color: #0277bd;
 }
-.background-image {
-  background:url("./assets/pattern.png");
-  background-repeat: repeat;
-  display: block;
-  left: 0;
-  position: fixed;
-  right: 0;
-  z-index: 1;
-  height: 100%;
-}
+// .background-image {
+//   background:url("./assets/pattern.png");
+//   background-repeat: repeat;
+//   display: block;
+//   left: 0;
+//   position: fixed;
+//   right: 0;
+//   z-index: 1;
+//   height: 100%;
+// }
 .card-title {
   font-weight: bolder;
 }
