@@ -45,7 +45,7 @@ export default {
   },
   created: function () {
     if (localStorage.hasOwnProperty('token')) {
-      location.replace('/todo')
+      this.$router.push('/todo')
     } else {
       // FB SDK
       (function (d, s, id) {
@@ -60,7 +60,7 @@ export default {
       }(document, 'script', 'facebook-jssdk'))
       window.fbAsyncInit = function () {
         window.FB.init({
-          appId: '975855832585758',
+          appId: '1369761109791179',
           cookie: true,
           xfbml: true,
           version: 'v2.8'

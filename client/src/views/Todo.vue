@@ -168,7 +168,7 @@ export default {
   },
   async created () {
     if (!localStorage.hasOwnProperty('token')) {
-      window.location.replace('/')
+      this.$router.push('/')
     }
     this.getTodo()
   },
